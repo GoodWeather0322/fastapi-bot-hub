@@ -1,5 +1,11 @@
 # fastapi-bot-hub
 
+## 預計新增
+
+- [ ] 新增 LINE 機器人
+- [ ] 新增 Email 機器人
+- [ ] 新增 Discord 機器人
+
 ## 專案介紹
 
 `fastapi-bot-hub` 是一個基於 FastAPI 的聊天機器人集線器，旨在整合多個聊天平台的機器人功能。目前支持的聊天平台包括 LINE 和 Telegram。該專案的架構設計使得未來可以輕鬆擴展以支持更多平台。
