@@ -5,6 +5,9 @@ pydantic-settings
 ## LINE BOT
 line-bot-sdk
 
+## DISCORD BOT
+discord.py
+
 ## dev
 commitizen
 cz-conventional-gitmoji
