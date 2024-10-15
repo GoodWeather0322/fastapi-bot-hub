@@ -34,7 +34,7 @@ async def linebot_webhook(request: Request):
     body = await request.body()
     body = body.decode("utf-8")
 
-    # logger.info("Request body: " + body)
+    logger.info("Request body: " + body)
 
     try:
         events = parser.parse(body, signature)
@@ -42,15 +42,15 @@ async def linebot_webhook(request: Request):
         raise HTTPException(status_code=400, detail="Invalid signature")
 
     for event in events:
-        if not isinstance(event, MessageEvent):
-            continue
-        if not isinstance(event.message, TextMessageContent):
-            continue
-        await line_bot_api.reply_message(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)],
+        if isinstance(event, MessageEvent) and isinstance(
+            event.message, TextMessageContent
+        ):
+            await line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=event.message.text)],
+                )
             )
-        )
-
+        else:
+            logger.info(f"Unsupported event type: {type(event)}")
     return "OK"
