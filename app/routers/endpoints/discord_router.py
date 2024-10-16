@@ -21,9 +21,29 @@ async def hello_world():
 
 @bot.event
 async def on_ready():
-    logger.info(f"Bot is ready. Logged in as {bot.user}")
+    logger.info(f"Bot is ready. 目前登入身份 --> {bot.user}")
 
 
+# 卸載指令檔案
+@bot.command()
+async def unload(ctx):
+    await bot.unload_extension(f"app.adapters.discord_adapter")
+    await ctx.send(f"UnLoaded extension done.")
+
+
+# 重新載入程式檔案
+@bot.command()
+async def reload(ctx):
+    await bot.reload_extension(f"app.adapters.discord_adapter")
+    await ctx.send(f"ReLoaded extension done.")
+
+
+# 一開始bot開機需載入全部程式檔案
+async def load_extensions():
+    await bot.load_extension(f"app.adapters.discord_adapter")
+
+
+# 歡迎訊息
 @bot.command()
 async def welcome(ctx: commands.Context, member: discord.Member):
     await ctx.send(f"Welcome to {ctx.guild.name},  {member.mention}!")
@@ -31,6 +51,7 @@ async def welcome(ctx: commands.Context, member: discord.Member):
 
 async def run():
     try:
+        await load_extensions()
         await bot.start(settings.DISCORD_TOKEN)
     except KeyboardInterrupt:
         await bot.close()
