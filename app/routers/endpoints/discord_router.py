@@ -21,32 +21,36 @@ async def hello_world():
 
 @bot.event
 async def on_ready():
+    slash = await bot.tree.sync()
     logger.info(f"Bot is ready. 目前登入身份 --> {bot.user}")
+    logger.info(f"載入 {len(slash)} 個斜線指令")
 
 
 # 卸載指令檔案
-@bot.command()
-async def unload(ctx):
+@bot.tree.command()
+async def unload(interaction: discord.Interaction):
     await bot.unload_extension(f"app.adapters.discord_adapter")
-    await ctx.send(f"UnLoaded extension done.")
+    await interaction.response.send_message(f"UnLoaded extension done.")
 
 
 # 重新載入程式檔案
-@bot.command()
-async def reload(ctx):
+@bot.tree.command()
+async def reload(interaction: discord.Interaction):
     await bot.reload_extension(f"app.adapters.discord_adapter")
-    await ctx.send(f"ReLoaded extension done.")
+    await interaction.response.send_message(f"ReLoaded extension done.")
 
 
-# 一開始bot開機需載入全部程式檔案
+# 載入全部指令檔案
 async def load_extensions():
     await bot.load_extension(f"app.adapters.discord_adapter")
 
 
 # 歡迎訊息
-@bot.command()
-async def welcome(ctx: commands.Context, member: discord.Member):
-    await ctx.send(f"Welcome to {ctx.guild.name},  {member.mention}!")
+@bot.tree.command()
+async def welcome(interaction: discord.Interaction, member: discord.Member):
+    await interaction.response.send_message(
+        f"Welcome to {interaction.guild.name},  {member.mention}!"
+    )
 
 
 async def run():
