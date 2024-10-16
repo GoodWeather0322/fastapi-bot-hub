@@ -22,7 +22,7 @@ class DiscordAdapter(commands.Cog):
         function = getattr(business_logic, item["function"], None)
 
         async def command_callback(interaction: discord.Interaction):
-            result = function()
+            result = await function()
             await interaction.response.send_message(result)
 
         slash_command = app_commands.Command(

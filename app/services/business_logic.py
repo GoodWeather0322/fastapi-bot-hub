@@ -12,14 +12,14 @@ config = [
 ]
 
 
-def get_weather():
+async def get_weather():
     """
     查詢城市天氣
     """
     return "天氣是晴朗的"
 
 
-def get_buy():
+async def get_buy():
     """
     買入
     """
