@@ -1,0 +1,17 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        FASTAPI_RELOAD: false
+    image: bot-backend-production
+    ports:
+      - "${FASTAPI_PORT}:${FASTAPI_PORT}"
+    restart: always
+    # TODO: 目前的作法把啟動指令寫在 Dockerfile 裡面，所以BOT_TYPE 跟 FASTAPI_RELOAD build後無法再修改，如果需要修改的話，待處理
+    # env_file:
+    #   - .env
+    # environment:
+    #   FASTAPI_RELOAD: "false"
+    #   BOT_TYPE: 'discord'

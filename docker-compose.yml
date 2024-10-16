@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: .
+    image: bot-backend
+    command: /bin/sh -c "./start.sh"
+    volumes:
+      - .:/code
+    ports:
+      - "${FASTAPI_PORT}:${FASTAPI_PORT}"
+    restart: always
