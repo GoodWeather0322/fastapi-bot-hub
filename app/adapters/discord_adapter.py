@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from app.utils.logging_config import logging
+from app.services import business_logic
 
 logger = logging.getLogger(__name__)
 
@@ -9,11 +10,28 @@ logger = logging.getLogger(__name__)
 class DiscordAdapter(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.load_config()
 
-    @app_commands.command(name="weather", description="查詢天氣")
-    async def weather(self, interaction: discord.Interaction):
-        logger.info(f"slash weather command!")
-        await interaction.response.send_message("查詢天氣")
+    def load_config(self):
+        config = business_logic.config
+        for item in config:
+            slash_command = self.create_slash_command(item)
+            self.bot.tree.add_command(slash_command)
+
+    def create_slash_command(self, item):
+        function = getattr(business_logic, item["function"], None)
+
+        async def command_callback(interaction: discord.Interaction):
+            result = function()
+            await interaction.response.send_message(result)
+
+        slash_command = app_commands.Command(
+            name=item["name"],
+            description=item["description"],
+            callback=command_callback,
+        )
+
+        return slash_command
 
 
 class DiscordAdapterSample(commands.Cog):
@@ -41,5 +59,5 @@ class DiscordAdapterSample(commands.Cog):
 
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(DiscordAdapterSample(bot))
+    # await bot.add_cog(DiscordAdapterSample(bot))
     await bot.add_cog(DiscordAdapter(bot))
