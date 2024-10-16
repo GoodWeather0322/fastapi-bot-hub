@@ -2,27 +2,17 @@ from fastapi import APIRouter, Request, Response, HTTPException
 
 from linebot.v3.webhook import WebhookParser
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
-from linebot.v3.messaging import (
-    AsyncApiClient,
-    AsyncMessagingApi,
-    Configuration,
-    ReplyMessageRequest,
-    TextMessage,
-)
 from linebot.v3.exceptions import InvalidSignatureError
 
-from app.adapters.line_adapter import LineBotAdapter
+from app.adapters.line_adapter import LineAdapter
 from app.utils.logging_config import logging
 from app.utils.config import settings
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
-adapter = LineBotAdapter()
+adapter = LineAdapter()
 
-configuration = Configuration(access_token=settings.LINE_CHANNEL_ACCESS_TOKEN)
-async_api_client = AsyncApiClient(configuration)
-line_bot_api = AsyncMessagingApi(async_api_client)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
 
@@ -45,12 +35,7 @@ async def linebot_webhook(request: Request):
         if isinstance(event, MessageEvent) and isinstance(
             event.message, TextMessageContent
         ):
-            await line_bot_api.reply_message(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=event.message.text)],
-                )
-            )
+            await adapter.handle_message(event)
         else:
             logger.info(f"Unsupported event type: {type(event)}")
     return "OK"
