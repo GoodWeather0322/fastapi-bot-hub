@@ -47,7 +47,7 @@ fastapi-bot-hub/
 └── requirements.txt
 ```
 
-- `app/adapters/`: 包含不同平台的適配器，用於將平台特定的消息格式轉換為統一的輸入/輸出格式。
+- `app/adapters/`: 包含不同平台的適配器，用於將平台特定的訊息/指令轉換為統一的格式做後續處理。
   - `line_adapter.py`: LINE 平台的適配器。
   - `telegram_adapter.py`: Telegram 平台的適配器。
 
