@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from app.adapters.telegram_adapter import TelegramBotAdapter
-from app.services.business_logic import BusinessLogic
+from app.services.services import BusinessLogic
 
 router = APIRouter()
 adapter = TelegramBotAdapter()

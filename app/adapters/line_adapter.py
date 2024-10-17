@@ -6,7 +6,7 @@ from linebot.v3.messaging import (
     TextMessage,
 )
 
-from app.services import business_logic
+from app.services import services
 from app.utils.config import settings
 
 configuration = Configuration(access_token=settings.LINE_CHANNEL_ACCESS_TOKEN)
@@ -19,12 +19,12 @@ class LineAdapter:
         self.load_config()
 
     def load_config(self):
-        self.config = business_logic.config
+        self.config = services.config
         self.command_map = {}
         for item in self.config:
             command = item["name"]
             description = item["description"]
-            function = getattr(business_logic, item["function"], None)
+            function = getattr(services, item["function"], None)
             self.command_map[command] = {
                 "description": description,
                 "function": function,

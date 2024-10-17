@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from app.utils.logging_config import logging
-from app.services import business_logic
+from app.services import services
 
 logger = logging.getLogger(__name__)
 
@@ -13,13 +13,13 @@ class DiscordAdapter(commands.Cog):
         self.load_config()
 
     def load_config(self):
-        config = business_logic.config
+        config = services.config
         for item in config:
             slash_command = self.create_slash_command(item)
             self.bot.tree.add_command(slash_command)
 
     def create_slash_command(self, item):
-        function = getattr(business_logic, item["function"], None)
+        function = getattr(services, item["function"], None)
 
         async def command_callback(interaction: discord.Interaction):
             result = await function()
