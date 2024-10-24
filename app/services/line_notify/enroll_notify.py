@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 from app.services.scheduler import scheduler
 from app.utils.logging_config import logging
@@ -64,4 +65,16 @@ async def crawl_ticket_info():
         await send_line_notify_to_all(result_message)
 
 
+async def health_check():
+    now = datetime.now()
+    now_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    token_storage_file = Path("./app/services/line_notify/token.json")
+    with open(token_storage_file, "r") as f:
+        user2token = json.load(f)
+    for user, access_token in user2token.items():
+        if user == "簡靖岳":
+            await send_line_notify(f"\n定期 health check {now_str}\n", access_token)
+
+
 scheduler.add_job(crawl_ticket_info, "interval", seconds=10)
+scheduler.add_job(health_check, "cron", hour="11,23")
