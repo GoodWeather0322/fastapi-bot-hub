@@ -1,12 +1,16 @@
 fastapi
 uvicorn
 pydantic-settings
+apscheduler
+beautifulsoup4
 
 ## LINE BOT
 line-bot-sdk
 
 ## DISCORD BOT
 discord.py
+
+## fb crawler
 
 ## dev
 commitizen
