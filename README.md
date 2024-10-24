@@ -2,11 +2,11 @@
 
 ## 預計新增
 
-- [ :green_circle: ] LINE Bot
-- [ :green_circle: ] Discord Bot
-- [ :red_circle: ] Telegram Bot
-- [ :red_circle: ] Email Bot (自動推播)
-- [ :green_circle: ] Line Notify Bot (自動推播)
+- :green_circle: LINE Bot
+- :green_circle: Discord Bot
+- :red_circle: Telegram Bot
+- :red_circle: Email Bot (自動推播)
+- :green_circle: Line Notify Bot (自動推播)
 
 
 ## 專案介紹
