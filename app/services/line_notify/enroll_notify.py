@@ -68,12 +68,7 @@ async def crawl_ticket_info():
 async def health_check():
     now = datetime.now()
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    token_storage_file = Path("./app/services/line_notify/token.json")
-    with open(token_storage_file, "r") as f:
-        user2token = json.load(f)
-    for user, access_token in user2token.items():
-        if user == "簡靖岳":
-            await send_line_notify(f"\n定期 health check {now_str}\n", access_token)
+    await send_line_notify_to_all(f"\n定期 health check {now_str}\n")
 
 
 scheduler.add_job(crawl_ticket_info, "interval", seconds=10)
