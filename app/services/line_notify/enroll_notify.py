@@ -98,5 +98,5 @@ async def health_check():
 
 
 scheduler.add_job(crawl_ticket_info, "interval", seconds=10)
-scheduler.add_job(web_health_check, "cron", hour="1,5,9,11,13,15,17,19,21,23")
+scheduler.add_job(web_health_check, "cron", hour="0, 2, 8, 10, 12, 14, 16, 18, 20, 22")
 scheduler.add_job(health_check, "cron", hour="11,23")
