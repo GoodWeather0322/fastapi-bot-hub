@@ -65,11 +65,38 @@ async def crawl_ticket_info():
         await send_line_notify_to_all(result_message)
 
 
+async def web_health_check():
+    web_alive = False
+    try:
+        url = "https://countryedu.uaicraft.com"
+        response = requests.get(url)
+        if response.status_code == 200:
+            web_alive = True
+        else:
+            pass
+    except Exception as e:
+        pass
+    now = datetime.now()
+    now_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    message = f"\n【website health check】\ncountryedu.uaicraft.com\n{now_str}\n"
+    if web_alive:
+        message += "網站正常運作\n"
+    else:
+        message += "網站沒有回應\n"
+    token_storage_file = Path("./app/services/line_notify/token.json")
+    with open(token_storage_file, "r") as f:
+        user2token = json.load(f)
+    for user, access_token in user2token.items():
+        if user == "簡靖岳":
+            await send_line_notify(message, access_token)
+
+
 async def health_check():
     now = datetime.now()
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    await send_line_notify_to_all(f"\n定期 health check {now_str}\n")
+    await send_line_notify_to_all(f"\n【service health check】\n{now_str}\n服務正常\n")
 
 
 scheduler.add_job(crawl_ticket_info, "interval", seconds=10)
+scheduler.add_job(web_health_check, "cron", hour="1,5,9,11,13,15,17,19,21,23")
 scheduler.add_job(health_check, "cron", hour="11,23")
