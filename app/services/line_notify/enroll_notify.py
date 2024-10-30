@@ -80,7 +80,7 @@ async def web_health_check():
     now_str = now.strftime("%Y-%m-%d %H:%M:%S")
     message = f"\n【website health check】\ncountryedu.uaicraft.com\n{now_str}\n"
     if web_alive:
-        message += "網站正常運作\n"
+        return
     else:
         message += "網站沒有回應\n"
     token_storage_file = Path("./app/services/line_notify/token.json")
