@@ -48,7 +48,7 @@ async def crawl_ticket_info():
         trs = table.find_all("tr")
         for tr in trs:
             button = tr.find("button")
-            if button:
+            if button and "No tickets available" not in tr.get_text():
                 message = f"{tr.get_text()} => 發現釋票"
                 result_text.append(message)
     else:
