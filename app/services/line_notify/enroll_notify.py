@@ -3,7 +3,9 @@ import json
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+import asyncio
 
+from app.core.trail.trail_queryTime import query_time
 from app.services.scheduler import scheduler
 from app.utils.logging_config import logging
 
@@ -97,6 +99,30 @@ async def health_check():
     await send_line_notify_to_all(f"\n【service health check】\n{now_str}\n服務正常\n")
 
 
+async def query_time_job():
+    result_query_time = await query_time()
+    if not result_query_time:
+        return
+    message = ""
+    for data in result_query_time:
+        logger.info(data)
+        if data["餘票狀態"] != "沒票":
+            line = f'出發時間: {data["出發時間"]}, 抵達時間: {data["抵達時間"]}, 旅程時間: {data["旅程時間"]}, 餘票狀態: {data["餘票狀態"]}\n'
+            message += line
+
+    if message == "":
+        return
+
+    message = "\n" + message
+    token_storage_file = Path("./app/services/line_notify/token.json")
+    with open(token_storage_file, "r") as f:
+        user2token = json.load(f)
+    for user, access_token in user2token.items():
+        if user == "簡靖岳" or user == "hsuifang":
+            response = await send_line_notify(message, access_token)
+
+
 scheduler.add_job(crawl_ticket_info, "interval", seconds=10)
 scheduler.add_job(web_health_check, "cron", hour="0, 2, 8, 10, 12, 14, 16, 18, 20, 22")
 scheduler.add_job(health_check, "cron", hour="11,23")
+scheduler.add_job(query_time_job, "interval", minutes=10)

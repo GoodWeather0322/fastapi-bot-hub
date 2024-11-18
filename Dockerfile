@@ -1,7 +1,11 @@
 FROM python:3.12-slim
 
 # 安裝 tzdata
-RUN apt-get update && apt-get install -y tzdata
+RUN apt-get update && \
+    apt-get install -y tzdata && \
+    apt-get install -y ffmpeg && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # 設置時區
 ENV TZ=Asia/Taipei
