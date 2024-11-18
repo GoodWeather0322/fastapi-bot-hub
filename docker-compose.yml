@@ -8,3 +8,7 @@ services:
     ports:
       - "${FASTAPI_PORT}:${FASTAPI_PORT}"
     restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3" 

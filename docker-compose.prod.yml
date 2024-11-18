@@ -9,6 +9,10 @@ services:
     ports:
       - "${FASTAPI_PORT}:${FASTAPI_PORT}"
     restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3" 
     # TODO: 目前的作法把啟動指令寫在 Dockerfile 裡面，所以BOT_TYPE 跟 FASTAPI_RELOAD build後無法再修改，如果需要修改的話，待處理
     # env_file:
     #   - .env
